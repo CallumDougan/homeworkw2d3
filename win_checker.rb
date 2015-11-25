@@ -1,15 +1,12 @@
+require_relative('game')
+
 class WinChecker
-
-  def initialize()
-
-  end
 
   def has_won?(symbol, board)
     if horizontal_line?(symbol, board) ||
     vertical_line?(symbol, board) ||
     diagonal_line?(symbol, board)
-    puts "Congratulations player #{symbol}!  Somehow you mastered this complex game.\n\n"
-    self.new_game
+    return true
     end
   end
 

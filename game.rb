@@ -29,11 +29,20 @@ class Game
     puts "\nTurn ##{self.turn} played.\n\nTurn ##{self.turn+1}, #{@pieces[ @turn % 2 ]}: \n\n"
     puts self.show_board
     puts "\n"
-    @winchecker.has_won?(current_piece, @board)
+    check_for_win
     self.draw_check
     @turn += 1
   end
 
+  def check_for_win
+    if @winchecker.has_won?(@pieces[ @turn % 2 ], @board)
+    puts "Congratulations player #{@pieces[ @turn % 2 ]}!  Somehow you mastered this complex game.\n\n"
+    new_game
+    elsif @turn == 9
+    puts "You are both terrible at this."
+    new_game
+    end
+  end
 
   def show_board
     row_strings = @board.map do |row|
@@ -60,10 +69,7 @@ class Game
   end
 
   def draw_check
-    if @turn == 9
-      puts "You are both terrible at this."
-      self.new_game
-    end
+   @turn == 9
   end
 
   private 
