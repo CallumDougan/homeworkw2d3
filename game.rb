@@ -15,7 +15,28 @@ class Game
     @winchecker = winchecker
   end
 
+  def user_input
+    puts "Please enter your play in the format ROW,COLUMN e.g. 2,1"
+    played = gets.chomp.split(",")
+    row = played[0].to_i
+    column = played[1].to_i
+    place_piece(row, column)
+  end
+
   def place_piece (row, column)
+    if !sense_checker(row, column)    
+    return
+    end
+    @board[ row ][ column ] = @pieces[ @turn % 2 ]
+    puts "\nTurn ##{self.turn} played.\n\nTurn ##{self.turn+1}, #{@pieces[ @turn % 2 ]} to play.  Here is the board: \n\n"
+    puts self.show_board
+    puts "\n"
+    check_for_result
+    @turn += 1
+    user_input
+  end
+
+  def sense_checker (row, column)
     if row > 2 || column > 2
       puts "Play on the board, you simpleton."
       return false
@@ -24,17 +45,10 @@ class Game
       puts "Place occupied, cheater!"
       return false
     end
-    @board[ row ][ column ] = @pieces[ @turn % 2 ]
-    current_piece = @pieces[ @turn % 2 ]
-    puts "\nTurn ##{self.turn} played.\n\nTurn ##{self.turn+1}, #{@pieces[ @turn % 2 ]}: \n\n"
-    puts self.show_board
-    puts "\n"
-    check_for_win
-    self.draw_check
-    @turn += 1
+    true
   end
 
-  def check_for_win
+  def check_for_result
     if @winchecker.has_won?(@pieces[ @turn % 2 ], @board)
     puts "Congratulations player #{@pieces[ @turn % 2 ]}!  Somehow you mastered this complex game.\n\n"
     new_game
@@ -61,11 +75,12 @@ class Game
     @pieces.reverse!
     puts "New game. #{@pieces[ @turn % 2 ]} to play: \n\n"
     puts self.show_board
+    user_input
   end
 
   def flip_board
     puts "You flip the table in a rage!\nTry again, loser."
-    self.new_game
+    new_game
   end
 
   def draw_check
