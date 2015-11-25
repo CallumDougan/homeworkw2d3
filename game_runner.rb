@@ -1,7 +1,9 @@
 require('pry-byebug')
 require_relative("game")
+require_relative('win_checker')
 
-game = Game.new()
+winchecker = WinChecker.new()
+game = Game.new(winchecker)
 
 #placing pieces
 game.new_game

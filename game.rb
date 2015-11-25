@@ -1,8 +1,10 @@
+require_relative ("win_checker")
+
 class Game
 
   attr_reader :turn
 
-  def initialize ()
+  def initialize (winchecker)
     @board = [
       [nil,nil,nil],
       [nil,nil,nil],
@@ -10,6 +12,7 @@ class Game
                     ]
     @pieces = [:o, :x]
     @turn = 0
+    @winchecker = winchecker
   end
 
   def place_piece (row, column)
@@ -21,13 +24,14 @@ class Game
       puts "Place occupied, cheater!"
       return false
     end
-    @turn += 1
     @board[ row ][ column ] = @pieces[ @turn % 2 ]
+    current_piece = @pieces[ @turn % 2 ]
     puts "\nTurn ##{self.turn} played.\n\nTurn ##{self.turn+1}, #{@pieces[ @turn % 2 ]}: \n\n"
     puts self.show_board
     puts "\n"
-    self.has_won?(@board[ row ][ column ])
+    @winchecker.has_won?(current_piece, @board)
     self.draw_check
+    @turn += 1
   end
 
 
@@ -62,40 +66,6 @@ class Game
     end
   end
 
-  def has_won?(symbol)
-    if horizontal_line?(symbol, @board) ||
-    vertical_line?(symbol) ||
-    diagonal_line?(symbol)
-    puts "Congratulations player #{symbol}!  Somehow you mastered this complex game.\n\n"
-    self.new_game
-    end
-  end
-
-  def horizontal_line?(symbol, board)
-    board.any? do |row|
-      row_has_winning_line(row, symbol)
-    end
-  end
-
-  def vertical_line?(symbol)
-    transp_board = @board.transpose
-    horizontal_line?(symbol, transp_board)
-  end
-
-  def diagonal_line?(symbol)
-    middle_piece = @board[1][1]
-    return false if middle_piece != symbol
-    topleft_bottomright = @board[0][0] == symbol && @board[2][2] == symbol
-    bottomleft_topright = @board[2][0] == symbol && @board[0][2] == symbol
-    topleft_bottomright || bottomleft_topright
-  end
-
-  def row_has_winning_line(row, symbol)
-    row.all? do |square|
-    square == symbol
-    end
-  end
-
   private 
 
   def row_to_string(row)
@@ -104,5 +74,7 @@ class Game
   end
     row_sym.join("|")
   end
+
+
 
 end
