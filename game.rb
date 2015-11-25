@@ -1,4 +1,5 @@
 require_relative ("win_checker")
+require_relative ('AI')
 
 class Game
 
@@ -15,7 +16,22 @@ class Game
     @winchecker = winchecker
   end
 
+  def start
+    puts "Would you like to play?  Enter y to begin:\n"
+    while answer = gets.chomp
+      case answer
+      when "y"
+        puts "Starting game:"
+        self.user_input
+        break
+      else
+        puts "Would you like to play?  Enter y to begin:\n"
+    end
+    end
+  end
+
   def user_input
+    puts self.show_board
     puts "Please enter your play in the format ROW,COLUMN e.g. 2,1"
     played = gets.chomp.split(",")
     row = played[0].to_i
@@ -28,7 +44,7 @@ class Game
     return
     end
     @board[ row ][ column ] = @pieces[ @turn % 2 ]
-    puts "\nTurn ##{self.turn} played.\n\nTurn ##{self.turn+1}, #{@pieces[ @turn % 2 ]} to play.  Here is the board: \n\n"
+    puts "\nTurn ##{self.turn} played.\n\nTurn ##{self.turn+1}, #{@pieces[ @turn % 2  + 1]} to play.  Here is the board: \n\n"
     puts self.show_board
     puts "\n"
     check_for_result
@@ -95,7 +111,5 @@ class Game
   end
     row_sym.join("|")
   end
-
-
 
 end
