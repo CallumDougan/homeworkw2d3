@@ -26,14 +26,17 @@ class Game
         break
       else
         puts "Would you like to play?  Enter y to begin:\n"
-    end
+      end
     end
   end
 
   def user_input
     puts self.show_board
-    puts "Please enter your play in the format ROW,COLUMN e.g. 2,1"
+    puts "Please enter your play in the format ROW,COLUMN e.g. 2,1, or ctrl-C to quit"
     played = gets.chomp.split(",")
+    # if played = "quit"
+    #   self.start
+    # end
     row = played[0].to_i
     column = played[1].to_i
     place_piece(row, column)
