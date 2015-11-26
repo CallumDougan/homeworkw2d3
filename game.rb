@@ -32,7 +32,7 @@ class Game
 
   def user_input
     puts self.show_board
-    puts "Please enter your play in the format ROW,COLUMN e.g. 2,1, or ctrl-C to quit"
+    puts "Please enter your play in the format ROW,COLUMN e.g. 2,1, or ctrl-C to quit. 0,2 is top right: 2,0 is bottom left."
     played = gets.chomp.split(",")
     # if played = "quit"
     #   self.start
